@@ -22,7 +22,7 @@ routes.use(authMiddleware);
 
 // user
 routes.get("/users", UserController.findAll);
-routes.put("/users/:id", UserController.update);
-routes.delete("/users/:id", UserController.delete);
+routes.put("/users", UserController.update);
+routes.delete("/users", UserController.delete);
 
 export default routes;

@@ -22,34 +22,35 @@ class UserController {
   async findAll(request: Request, response: Response) {
     const users = await UserRepository.findAll();
 
+    for (const user of users) {
+      delete user.password;
+    }
+
     return response.json(users);
   }
 
   async update(request: Request, response: Response) {
-    const { id } = request.params;
     const body = request.body;
 
-    const userExists = await UserRepository.findById(id);
+    const userExists = await UserRepository.findById(request.userId);
 
     if (!userExists) {
       return response.status(400).json({ error: "User not exists" });
     }
 
-    const user = await UserRepository.update(id, body);
+    const user = await UserRepository.update(request.userId, body);
 
     return response.json(user);
   }
 
   async delete(request: Request, response: Response) {
-    const { id } = request.params;
-
-    const userExists = await UserRepository.findById(id);
+    const userExists = await UserRepository.findById(request.userId);
 
     if (!userExists) {
       return response.status(400).json({ error: "User not exists" });
     }
 
-    const user = await UserRepository.delete(id);
+    const user = await UserRepository.delete(request.userId);
 
     return response.json(user);
   }
