@@ -22,7 +22,6 @@ class EventController {
       let authResponse = JSON.parse(msg.content.toString());
 
       if (authResponse.role !== "admin") {
-        console.log(authResponse.role);
         return response.status(401).json({ error: "Unauthorized" });
       }
 
@@ -50,19 +49,15 @@ class EventController {
     await rabbitmq.sendToQueue("isAuth", auth);
 
     await rabbitmq.consume("authResponse", async (msg) => {
-      try {
-        let authResponse = JSON.parse(msg?.content?.toString());
+      let authResponse = JSON.parse(msg?.content?.toString());
 
-        if (!authResponse) {
-          return response.status(401).json({ error: "Unauthorized" }).end();
-        }
-
-        const event = await eventRepository.getEvents();
-
-        return response.json(event);
-      } catch (error) {
-        console.log(error);
+      if (!authResponse) {
+        return response.status(401).json({ error: "Unauthorized" }).end();
       }
+
+      const event = await eventRepository.getEvents();
+
+      return response.json(event);
     });
 
     await rabbitmq.close();
@@ -86,7 +81,6 @@ class EventController {
       let authResponse = JSON.parse(msg.content.toString());
 
       if (authResponse.role !== "admin") {
-        console.log(authResponse.role);
         return response.status(401).json({ error: "Unauthorized" });
       }
 
@@ -120,7 +114,6 @@ class EventController {
     await rabbitmq.consume("authResponse", async (msg) => {
       let authResponse = JSON.parse(msg.content.toString());
       if (authResponse.role !== "admin") {
-        console.log(authResponse.role);
         return response.status(401).json({ error: "Unauthorized" });
       }
 

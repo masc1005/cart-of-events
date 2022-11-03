@@ -61,11 +61,9 @@ class CartController {
 
         return response.status(200).json(cart);
       });
-
-      setTimeout(async () => {
-        await rabbitmq.close();
-      }, 2000);
     });
+    await rabbitmq.close();
+    setTimeout(async () => {}, 100);
   }
 
   async getCartByUserId(request: Request, response: Response) {
@@ -161,7 +159,7 @@ class CartController {
 
       setTimeout(async () => {
         await rabbitmq.close();
-      }, 1500);
+      }, 100);
     });
   }
 
@@ -235,7 +233,7 @@ class CartController {
       const cart = await CartRepository.updateCart(
         update,
         authResponse.id,
-        parseInt(total)
+        parseFloat(total)
       );
 
       return response.status(200).json(cart);
@@ -269,8 +267,6 @@ class CartController {
 
         await rabbitmq.consume("returnEvent", async (msg) => {
           let eventInfo = JSON.parse(msg.content.toString());
-
-          console.log(eventInfo["event"].quantity);
 
           await rabbitmq.createQueue("syncEventQuantity");
           await rabbitmq.sendToQueue(
@@ -317,7 +313,7 @@ class CartController {
 
     setTimeout(async () => {
       await rabbitmq.close();
-    }, 1500);
+    }, 10000);
   }
 
   async listCartHistoric(request: Request, response: Response) {
@@ -342,9 +338,9 @@ class CartController {
       return response.status(200).json(cartExists);
     });
 
-    setTimeout(async () => {
-      await rabbitmq.close();
-    }, 1500);
+    await rabbitmq.close();
+    // setTimeout(async () => {
+    // }, 1500);
   }
 }
 

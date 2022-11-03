@@ -37,7 +37,6 @@ class CartRepository {
         userId,
         itens: [infos],
         price: total,
-        eventsIds: eventInfo.id,
         status: 1,
       },
     });
@@ -107,15 +106,11 @@ class CartRepository {
         itens: [infos],
         price: total,
         status: 1,
-        eventsIds: eventInfo.id,
         id: addToCart.id,
         userId,
       },
       update: {
         price: total,
-        eventsIds: {
-          push: eventInfo.id,
-        },
         itens: {
           push: infos,
         },

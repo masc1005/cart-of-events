@@ -11,6 +11,10 @@ interface TokenPayload {
 }
 
 export default async function authService(authToken: string) {
+  if (!authToken) {
+    return { status: 401, msg: "Token not provided" };
+  }
+
   const token = authToken.replace("Bearer", "").trim();
   const data = jwt.verify(token, process.env.AUTH_SECRET);
 
